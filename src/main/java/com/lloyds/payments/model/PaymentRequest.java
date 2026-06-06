@@ -1,9 +1,6 @@
 package com.lloyds.payments.model;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +33,10 @@ public class PaymentRequest {
     @Size(min = 3, max = 3)
     private String currency;
 
+    @Size(max = 35)
+    private String reference;
+
     @NotNull
+    @PastOrPresent
     private Instant timestamp;
 }
