@@ -1,0 +1,18 @@
+[
+  {
+    "accountId":"123",
+    "accountName":"John Smith",
+    "accountType":"PERSONAL",
+    "status":"ACTIVE",
+    "currency":"GBP",
+    "openedDate":"2023-01-01"
+  },
+  {
+    "accountId":"456",
+    "accountName":"ABC Ltd",
+    "accountType":"BUSINESS",
+    "status":"ACTIVE",
+    "currency":"GBP",
+    "openedDate":"2022-05-10"
+  }
+]

@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:payment_ingestor_db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+
+      acks: all
+
+      enable-idempotence: true
+
+      linger-ms: 5
+
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+
+      group-id: payment-processor-group
+
+      max-poll-records: 100
+
+      auto-offset-reset: earliest
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
