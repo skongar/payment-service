@@ -3,7 +3,6 @@ package com.lloyds.payments.service;
 import com.lloyds.payments.dao.entity.PaymentOutcomeEntity;
 import com.lloyds.payments.dao.repo.PaymentOutcomeRepository;
 import com.lloyds.payments.model.PaymentEvent;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,11 +10,9 @@ import java.math.BigDecimal;
 
 @Service
 public class PaymentProcessorService {
-    private final KafkaTemplate<String, PaymentEvent> kafkaTemplate;
     private final PaymentOutcomeRepository repository;
 
-    public PaymentProcessorService(KafkaTemplate<String, PaymentEvent> kafkaTemplate, PaymentOutcomeRepository repository) {
-        this.kafkaTemplate = kafkaTemplate;
+    public PaymentProcessorService(PaymentOutcomeRepository repository) {
         this.repository = repository;
     }
 
@@ -26,12 +23,6 @@ public class PaymentProcessorService {
 
         PaymentOutcomeEntity entity = buildPaymentOutComeEntity(event, status);
         repository.save(entity);
-
-        kafkaTemplate.send(
-                "payments.processed",
-                event.getDebitAccountId(),
-                buildPaymentOutComeEvent(entity));
-
     }
 
     private String determineStatus(PaymentEvent event) {
@@ -54,9 +45,4 @@ public class PaymentProcessorService {
                 .build();
     }
 
-    private PaymentEvent buildPaymentOutComeEvent(PaymentOutcomeEntity entity) {
-        return PaymentEvent.builder()
-                .paymentId(entity.getPaymentId())
-                .build();
-    }
 }
